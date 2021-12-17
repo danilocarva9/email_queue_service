@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+
 use App\Models\Notification;
 use App\Models\NotificationStatus;
 use Illuminate\Support\Facades\Mail;
@@ -13,13 +14,7 @@ use App\Mail\SendEmail;
 class SendEmailJob extends Job
 {
 
-    /**
-    * Email data and params
-    *
-    * @var array
-    */
-    protected $email_data;
-
+    public $timeout = 0;
     /**
     * The number of times the job may be attempted.
     *
@@ -28,13 +23,20 @@ class SendEmailJob extends Job
     public $tries = 5;
 
     /**
+    * Email data and params
+    *
+    * @var array
+    */
+    protected $email;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($email_data)
+    public function __construct($email)
     {
-        $this->email_data = $email_data;
+        $this->email = $email;
     }
 
     /**
@@ -44,12 +46,19 @@ class SendEmailJob extends Job
      */
     public function handle()
     {
+
+
        
         try {
-            Mail::to($this->email_data['email'])->send(new SendEmail($this->email_data));
+            Mail::to($this->email['to'])
+            // ->cc($array_emails)
+            // ->bcc($array_emails)
+            ->send(new SendEmail($this->email));
         } catch (\Exception $ex) {
             $ex->getMessage();
         }
+
+        
 
         // // get mails with status 0
         // $mails = Notification::with('user', 'notify', 'entity_objects', 'notification_status')
@@ -60,7 +69,7 @@ class SendEmailJob extends Job
         //     })
         //     ->get();
 
-        // // check if pending email exists
+        // check if pending email exists
         // if ($mails->count() > 0) {
         //     foreach ($mails as $mail) {
         //         $template = $mail->entity_objects->template;
@@ -113,5 +122,8 @@ class SendEmailJob extends Job
     {
         // Send user notification of failure, etc...
     }
+
+
+
 
 }

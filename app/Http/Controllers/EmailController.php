@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\EmailService;
+use Illuminate\Http\Request;
+use App\Models\Email;
 
 class EmailController extends Controller
 {
@@ -19,20 +21,11 @@ class EmailController extends Controller
         $this->emailService = $emailService;
     }
 
-    public function sendEmail()
+    public function sendEmail(Request $request)
     {
-        //$job = (new SendEmailJob());
-
-        $email_data = [
-            'subject' => 'assunto',
-            'email' => 'danilocarva9@gmail.com',
-            'message' => '<p>html do email</p>'
-        ];
-
-        $this->emailService->send($email_data);
-
-        // $job = (new SendEmailJob());
-        // dispatch($job);
-        // return "Bulk mail send successfully in the background...";
+        $email = $request->all();
+        $method = env('MAIL_SEND_TYPE');
+        $this->emailService->handleRequest($email, $method);
+        return response()->json($email);
     }
 }

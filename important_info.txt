@@ -1,0 +1,21 @@
+
+queue:work should be preferred when you want your queue's to run as a daemon. This would be a long-lived process that would be beneficial where performance was an issue. This will use a cached version of the application and does not re-bootstrap the application every time a job is processed.
+
+queue:listen should be used when you don't care about performance or you don't want to have to restart the queue after making changes to the code.
+
+
+https://stackoverflow.com/questions/28623001/how-to-keep-laravel-queue-system-running-on-server
+
+The queue:listen command simply runs the queue:work --once command inside an infinite loop, this will cause the following:
+
+An instance of the app is booted up on every loop.
+The assigned worker will pick a single job and execute it.
+The worker process will be killed.
+
+
+
+php artisan queue:listen
+php artisan queue:retry all
+php artisan queue:work --tries=3
+
+https://lumen.laravel.com/docs/5.1/queues#running-the-queue-listener

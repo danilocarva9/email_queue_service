@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Jobs\SendEmailJob;
+use App\Models\Email;
 
 class EmailService
 {
@@ -10,11 +11,24 @@ class EmailService
         //
     }
    
-    public function send(array $email_data): bool{
+    public function send($email)
+    {
 
-        
-        $job = (new SendEmailJob($email_data));
-        dispatch($job);
-        return "Bulk mail send successfully in the background...";
+       //Manual sending
+
+        // $job = (new SendEmailJob($email));
+        // dispatch($job);
+        // return true;
+    }
+
+
+    public function handleRequest(array $email, $method = 'queue')
+    {
+        if($method == 'queue'){
+            $job = (new SendEmailJob($email));
+            dispatch($job);
+        }else{
+            $this->send($email);
+        }
     }
 }
