@@ -47,15 +47,14 @@ class SendEmailJob extends Job
     public function handle()
     {
 
-
        
         try {
             Mail::to($this->email['to'])
             // ->cc($array_emails)
             // ->bcc($array_emails)
             ->send(new SendEmail($this->email));
-        } catch (\Exception $ex) {
-            $ex->getMessage();
+        } catch (\Exception $e) {
+            return $this->response->error($e->getMessage(), 422);
         }
 
         

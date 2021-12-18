@@ -23,9 +23,9 @@ class EmailController extends Controller
 
     public function sendEmail(Request $request)
     {
-        $email = $request->all();
-        $method = env('MAIL_SEND_TYPE');
-        $this->emailService->handleRequest($email, $method);
+        $email = new Email();
+        $email->fill($request->all());
+        $this->emailService->handleRequest($email);
         return response()->json($email);
     }
 }

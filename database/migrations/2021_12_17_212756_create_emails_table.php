@@ -15,14 +15,16 @@ class CreateEmailsTable extends Migration
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('to');
-            $table->string('subject');
-            $table->text('message');
-            $table->string('send_type');
-            $table->string('origin');
-            $table->string('from');
-            $table->string('reply_to');
+            $table->string('failed_jobs_uuid');
+            $table->string('to')->nullable(false);
+            $table->string('subject')->nullable(false);
+            $table->text('message')->nullable(false);
+            $table->string('send_type')->nullable(true)->default(null);
+            $table->string('origin')->nullable(true)->change();
+            $table->string('from')->nullable(false);
+            $table->string('reply_to')->nullable(false);
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 
