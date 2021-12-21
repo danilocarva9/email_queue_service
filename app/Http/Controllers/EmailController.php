@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Services\EmailService;
-use Illuminate\Http\Request;
+use App\Http\Requests\EmailStoreRequest;
 use App\Models\Email;
 
 class EmailController extends Controller
 {
 
     protected $emailService;
+    protected $params;
+    public $request;
 
     /**
      * Create a new controller instance.
@@ -21,10 +23,17 @@ class EmailController extends Controller
         $this->emailService = $emailService;
     }
 
-    public function sendEmail(Request $request)
+    public function sendEmail(EmailStoreRequest $request)
     {
+        // $this->validate($request, [
+        //     'from' => 'required',
+        //     'reply_to' => 'required|email'
+        // ]);
+
+        dd($request);
+        
         $email = new Email();
-        $email->fill($request->all());
+        $email->fill($this->request->all());
         $this->emailService->handleRequest($email);
         return response()->json($email);
     }

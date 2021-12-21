@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Http\Requests\FormRequestInteface;
+use App\Http\Controllers\Controller;
 
 class AppServiceProvider extends ServiceProvider
 {

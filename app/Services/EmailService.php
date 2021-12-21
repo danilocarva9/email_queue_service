@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Jobs\SendEmailJob;
 use App\Models\Email;
 
+
 class EmailService
 {
     public function __construct()
